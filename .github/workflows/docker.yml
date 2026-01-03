@@ -2,7 +2,7 @@ name: Build Core3 Docker Image
 
 on:
   push:
-    branches: [ main ]
+    branches: [ unstable ]
   workflow_dispatch:
 
 jobs:
