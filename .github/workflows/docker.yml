@@ -34,5 +34,5 @@ jobs:
           file: docker/Dockerfile
           push: true
           tags: |
-            ghcr.io/randallc79/swgemu-core3:unstable
+            ghcr.io/randallc79/swgemu-core3:latest
             ghcr.io/randallc79/swgemu-core3:${{ github.sha }}
