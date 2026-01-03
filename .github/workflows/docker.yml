@@ -30,9 +30,9 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: .
+          context: ./docker
           file: docker/Dockerfile
           push: true
           tags: |
-            ghcr.io/randallc79/swgemu-core3:latest
+            ghcr.io/randallc79/swgemu-core3:unstable
             ghcr.io/randallc79/swgemu-core3:${{ github.sha }}
