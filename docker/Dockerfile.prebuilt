@@ -1,0 +1,70 @@
+# =========================
+# STAGE 1 — BUILD CORE3
+# =========================
+FROM debian:12 AS builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt install -y \
+    build-essential \
+    cmake \
+    clang \
+    lld \
+    git \
+    openjdk-17-jdk-headless \
+    libatomic1 \
+    libssl-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    liblzma-dev \
+    libreadline-dev \
+    libncurses5-dev \
+    libmysqlclient-dev \
+    mariadb-client \
+    screen \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+
+# clone Core3
+RUN git clone --branch unstable https://github.com/swgemu/Core3.git
+
+WORKDIR /build/Core3/MMOCoreORB
+
+# init submodules
+RUN git submodule update --init --recursive
+
+# configure + build
+RUN cmake . \
+ && make -j$(nproc)
+
+# =========================
+# STAGE 2 — RUNTIME IMAGE
+# =========================
+FROM debian:12
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt update && apt install -y \
+    openjdk-17-jre-headless \
+    mariadb-client \
+    libatomic1 \
+    screen \
+    && rm -rf /var/lib/apt/lists/*
+
+# create user
+RUN useradd -m -u 44400 swgemu
+
+WORKDIR /home/swgemu
+
+# copy built artifacts
+COPY --from=builder /build/Core3 /home/swgemu/Core3
+
+# runtime scripts (unchanged behavior)
+COPY files/ /home/swgemu/
+
+RUN chown -R swgemu:swgemu /home/swgemu
+
+USER swgemu
+
+CMD ["/home/swgemu/bin/run"]
