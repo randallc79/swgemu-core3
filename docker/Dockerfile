@@ -108,8 +108,9 @@ RUN set -xe; \
         vim-nox \
         wget \
     ; \
-    apt-get install lua5.3 liblua5.3-0 liblua5.3-dev; \
-    apt-get install lua-inspect lua-socket lua-sec lua-filesystem lua-cjson; \
+    apt-get install -y lua5.3 liblua5.3-0 liblua5.3-dev; \
+    apt-get install -y lua-inspect lua-socket lua-sec lua-filesystem lua-cjson; \
+	apt-get install -y openjdk-17-jdk; \
     apt-get autoremove -y; \
     rm -rf /var/lib/apt/lists/* /var/log/dpkg.log* /var/log/apt/*;
 
@@ -131,6 +132,9 @@ ENV STATUSPORT=${PORT_GROUP}455 \
     REPOS='Core3' \
     REPO_PUBLIC_URL=https://github.com/swgemu \
     REPO_PUBLIC_BRANCH='unstable'
+
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+ENV PATH=${JAVA_HOME}/bin:${PATH}
 
 ENV PATH=${HOME_DIR}/bin:/usr/local/bin:${PATH}
 
