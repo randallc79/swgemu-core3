@@ -5,7 +5,7 @@ on:
     branches: 
       - unstable
     paths:
-      - Dockerfile.prebuilt
+      - docker/Dockerfile.prebuilt
       - .github/workflows/docker-prebuilt.yml
   workflow_dispatch:
 
