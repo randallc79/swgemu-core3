@@ -8,8 +8,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && apt install -y \
     build-essential \
     cmake \
-    clang \
-    lld \
+    clang-16 \
+    lld-16 \
     git \
     openjdk-17-jdk-headless \
     libatomic1 \
@@ -23,6 +23,9 @@ RUN apt update && apt install -y \
     mariadb-client \
     screen \
     && rm -rf /var/lib/apt/lists/*
+
+ENV CC=clang-16
+ENV CXX=clang++-16
 
 WORKDIR /build
 

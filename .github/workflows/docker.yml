@@ -35,7 +35,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./docker
-          file: docker/Dockerfile
+          file: Dockerfile
           push: true
           tags: |
             ghcr.io/randallc79/swgemu-core3:latest
