@@ -33,7 +33,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./docker
-          file: Dockerfile.prebuilt
+          file: ./docker/Dockerfile.prebuilt
           push: true
           tags: |
             ghcr.io/randallc79/swgemu-core3:prebuilt
