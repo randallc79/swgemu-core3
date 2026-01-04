@@ -54,6 +54,8 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release . \
 FROM debian:12
 
 ENV DEBIAN_FRONTEND=noninteractive
+ENV HOME_DIR=/config/swgemu
+ENV RUN_USER=swgemu
 
 RUN apt update && apt install -y \
     openjdk-17-jre-headless \
@@ -75,6 +77,11 @@ COPY files/ /home/swgemu/
 
 RUN chown -R swgemu:swgemu /home/swgemu
 
+# expose firstboot where run.sh expects it
+RUN mkdir -p /firstboot \
+ && cp -r /home/swgemu/firstboot/* /firstboot/ \
+ && chown -R swgemu:swgemu /home/swgemu /firstboot
+
 USER swgemu
 
-CMD ["/home/swgemu/bin/run"]
+CMD ["/home/swgemu/run.sh"]
