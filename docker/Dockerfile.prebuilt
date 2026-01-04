@@ -45,7 +45,7 @@ WORKDIR /build/Core3/MMOCoreORB
 RUN git submodule update --init --recursive
 
 # configure + build
-RUN cmake . \
+RUN cmake -DCMAKE_BUILD_TYPE=Release . \
  && make -j$(nproc)
 
 # =========================
