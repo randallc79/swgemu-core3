@@ -6,7 +6,6 @@ on:
       - unstable
     paths:
       - Dockerfile
-      - docker/**
       - .github/workflows/docker.yml
   workflow_dispatch:
 
