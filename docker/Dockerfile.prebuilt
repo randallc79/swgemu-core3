@@ -27,6 +27,7 @@ RUN apt update && apt install -y \
     lua5.3 \
     liblua5.3-dev \
     libdb5.3-dev \
+    libboost-all-dev \
     screen \
     && rm -rf /var/lib/apt/lists/*
 
