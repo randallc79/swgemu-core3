@@ -62,6 +62,9 @@ RUN apt update && apt install -y \
     mariadb-client \
     libatomic1 \
     screen \
+    figlet \
+    rsync \
+    openssh-client \
     && rm -rf /var/lib/apt/lists/*
 
 # create user
@@ -81,7 +84,5 @@ RUN chown -R swgemu:swgemu /home/swgemu
 RUN mkdir -p /firstboot \
  && cp -r /home/swgemu/firstboot/* /firstboot/ \
  && chown -R swgemu:swgemu /home/swgemu /firstboot
-
-USER swgemu
 
 CMD ["/home/swgemu/run.sh"]
