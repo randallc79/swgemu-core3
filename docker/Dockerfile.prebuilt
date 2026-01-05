@@ -70,6 +70,7 @@ RUN apt update && apt install -y \
 
 # create user
 RUN useradd -m -u 44400 swgemu
+RUN useradd -r mysql || true
 
 WORKDIR /home/swgemu
 
