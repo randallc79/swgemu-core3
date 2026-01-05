@@ -54,12 +54,13 @@ RUN cmake -DCMAKE_BUILD_TYPE=Release . \
 FROM debian:12
 
 ENV DEBIAN_FRONTEND=noninteractive
-ENV HOME_DIR=/config/swgemu
+ENV HOME_DIR=/home/swgemu
 ENV RUN_USER=swgemu
 
 RUN apt update && apt install -y \
     openjdk-17-jre-headless \
     mariadb-client \
+    pwgen \
     libatomic1 \
     screen \
     figlet \
@@ -73,7 +74,8 @@ RUN useradd -m -u 44400 swgemu
 WORKDIR /home/swgemu
 
 # copy built artifacts
-COPY --from=builder /build/Core3 /home/swgemu/Core3
+RUN mkdir -p /home/swgemu/workspace
+COPY --from=builder /build/Core3 /home/swgemu/workspace/Core3
 
 # runtime scripts (unchanged behavior)
 COPY files/ /home/swgemu/
