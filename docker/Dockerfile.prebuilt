@@ -63,8 +63,8 @@ RUN apt update && apt install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # create users Core3 expects
-RUN useradd -m -u 44400 swgemu \
- && useradd -r mysql
+RUN id swgemu >/dev/null 2>&1 || useradd -m -u 44400 swgemu \
+ && id mysql  >/dev/null 2>&1 || true
 
 # MariaDB runtime dirs (Debian init expects these)
 RUN mkdir -p /var/lib/mysql /run/mysqld \
