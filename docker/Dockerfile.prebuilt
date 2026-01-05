@@ -29,6 +29,13 @@ RUN apt update && apt install -y \
     libdb5.3-dev \
     libboost-all-dev \
     screen \
+    libboost-thread-dev \
+    libboost-system-dev \
+    libboost-filesystem-dev \
+    libboost-program-options-dev \
+    libboost-regex-dev \
+    libboost-date-time-dev \
+    liblua5.3-0 \
     && rm -rf /var/lib/apt/lists/*
 
 ENV CC=clang-16
@@ -39,7 +46,13 @@ WORKDIR /build
 RUN git clone --branch unstable https://github.com/swgemu/Core3.git
 WORKDIR /build/Core3/MMOCoreORB
 RUN git submodule update --init --recursive
-RUN cmake -DCMAKE_BUILD_TYPE=Release . && make -j$(nproc)
+
+RUN cmake \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_C_FLAGS="-march=x86-64-v2" \
+  -DCMAKE_CXX_FLAGS="-march=x86-64-v2" \
+  . \
+ && make -j$(nproc)
 
 # =========================
 # STAGE 2 — RUNTIME IMAGE
