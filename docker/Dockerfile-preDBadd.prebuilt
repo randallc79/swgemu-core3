@@ -36,10 +36,17 @@ ENV CXX=clang++-16
 
 WORKDIR /build
 
+# clone Core3
 RUN git clone --branch unstable https://github.com/swgemu/Core3.git
+
 WORKDIR /build/Core3/MMOCoreORB
+
+# init submodules
 RUN git submodule update --init --recursive
-RUN cmake -DCMAKE_BUILD_TYPE=Release . && make -j$(nproc)
+
+# configure + build
+RUN cmake -DCMAKE_BUILD_TYPE=Release . \
+ && make -j$(nproc)
 
 # =========================
 # STAGE 2 — RUNTIME IMAGE
@@ -52,7 +59,6 @@ ENV RUN_USER=swgemu
 
 RUN apt update && apt install -y \
     openjdk-17-jre-headless \
-    mariadb-server \
     mariadb-client \
     pwgen \
     libatomic1 \
@@ -62,21 +68,17 @@ RUN apt update && apt install -y \
     openssh-client \
     && rm -rf /var/lib/apt/lists/*
 
-# create users Core3 expects
-RUN useradd -m -u 44400 swgemu \
- && useradd -r mysql
-
-# MariaDB runtime dirs (Debian init expects these)
-RUN mkdir -p /var/lib/mysql /run/mysqld \
- && chown -R mysql:mysql /var/lib/mysql /run/mysqld
+# create user
+RUN useradd -m -u 44400 swgemu
+RUN useradd -r mysql || true
 
 WORKDIR /home/swgemu
 
-# copy Core3 build
+# copy built artifacts
 RUN mkdir -p /home/swgemu/workspace
 COPY --from=builder /build/Core3 /home/swgemu/workspace/Core3
 
-# runtime scripts (unchanged Core3 behavior)
+# runtime scripts (unchanged behavior)
 COPY files/ /home/swgemu/
 
 RUN chown -R swgemu:swgemu /home/swgemu
@@ -85,8 +87,5 @@ RUN chown -R swgemu:swgemu /home/swgemu
 RUN mkdir -p /firstboot \
  && cp -r /home/swgemu/firstboot/* /firstboot/ \
  && chown -R swgemu:swgemu /home/swgemu /firstboot
-
-# required so /etc/init.d/mariadb works
-VOLUME ["/var/lib/mysql"]
 
 CMD ["/home/swgemu/run.sh"]
