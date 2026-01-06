@@ -78,6 +78,15 @@ RUN apt update && apt install -y \
     figlet \
     rsync \
     openssh-client \
+    libboost-thread1.74.0 \
+    libboost-system1.74.0 \
+    libboost-filesystem1.74.0 \
+    libboost-program-options1.74.0 \
+    libboost-regex1.74.0 \
+    libboost-date-time1.74.0 \
+    libboost-atomic1.74.0 \
+    liblua5.3-0 \
+    binutils \    
     && rm -rf /var/lib/apt/lists/*
 
 # create users Core3 expects
